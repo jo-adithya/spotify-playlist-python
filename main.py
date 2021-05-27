@@ -45,11 +45,15 @@ user_id = sp.current_user()['id']
 songs_uri = []
 
 for title in titles:
-    result = sp.search(f'track: {titles[0]} year:{date.year}', type='track')
+    result = sp.search(f'{title}', type='track')
     try:
         uri = result['tracks']['items'][0]['uri']
         songs_uri.append(uri)
     except (KeyError, IndexError):
         print(f"{title} didn't exist in Spotify.")
         continue
+
+# ---------------------------------- PLAYLISTS ---------------------------------- #
+playlist = sp.user_playlist_create(user=user_id, name=f'{date} Billboard 100')
+sp.playlist_add_items(playlist_id=playlist['id'], items=songs_uri)
 
