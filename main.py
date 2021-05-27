@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import requests
 
 while True:
-    date = input('Which year do you want to travel to? Type the date in YYYY-MM-DD: ')
+    date = input('Which year do you want to travel to? : ')
     try:
         date = parse(date).date()
         break
@@ -11,4 +11,11 @@ while True:
         print('Please give a valid date...')
         continue
 
-print(date)
+response = requests.get(f'https://www.billboard.com/charts/hot-100/{date}')
+html = response.text
+
+soup = BeautifulSoup(html, 'html.parser')
+titles = soup.find_all(name='span', class_='chart-element__information__song')
+
+for i in titles:
+    print(i.getText())
